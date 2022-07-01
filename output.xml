@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.3 (Python 3.7.5 on win32)" generated="20220701 15:41:25.803" rpa="true" schemaversion="2">
+<suite id="s1" name="Tasks" source="d:\weboldalak\Python\rc_level2\tasks.robot">
+<test id="s1-t1" name="Order robots from RobotSpareBin Industries Inc">
+<kw name="Get site url from vault">
+<var>${csv_site_url}</var>
+<kw name="Get Secret" library="RPA.Robocorp.Vault">
+<var>${vault_data}</var>
+<arg>vault_level2</arg>
+<doc>Read a secret from the configured source, e.g. Robocorp Vault,
+and return it as a ``Secret`` object.</doc>
+<msg timestamp="20220701 15:41:27.478" level="INFO">Protecting keyword: RPA.Robocorp.Vault.Get Secret</msg>
+<msg timestamp="20220701 15:41:27.479" level="INFO">Log level changed from NONE to INFO.</msg>
+<status status="PASS" starttime="20220701 15:41:27.477" endtime="20220701 15:41:27.479"/>
+</kw>
+<msg timestamp="20220701 15:41:27.480" level="INFO">${csv_site_url} = https://robotsparebinindustries.com/</msg>
+<status status="PASS" starttime="20220701 15:41:27.476" endtime="20220701 15:41:27.480"/>
+</kw>
+<kw name="Get data from user">
+<var>${csvFile}</var>
+<kw name="Add text input" library="RPA.Dialogs">
+<arg>csvFile</arg>
+<arg>label=Please type your CSV file name</arg>
+<tag>input</tag>
+<doc>Add a text input element</doc>
+<status status="PASS" starttime="20220701 15:41:27.481" endtime="20220701 15:41:27.481"/>
+</kw>
+<kw name="Run dialog" library="RPA.Dialogs">
+<var>${response}</var>
+<arg>title=type: orders.csv</arg>
+<tag>dialog</tag>
+<doc>Create a dialog from all the defined elements and block
+until the user has handled it.</doc>
+<msg timestamp="20220701 15:41:27.482" level="INFO">Protecting keyword: RPA.Dialogs.Run dialog</msg>
+<msg timestamp="20220701 15:41:31.612" level="INFO">Log level changed from NONE to INFO.</msg>
+<status status="FAIL" starttime="20220701 15:41:27.482" endtime="20220701 15:41:31.612"/>
+</kw>
+<status status="FAIL" starttime="20220701 15:41:27.480" endtime="20220701 15:41:31.614"/>
+</kw>
+<kw name="Download" library="RPA.HTTP">
+<arg>${csv_site_url}${csvFile}</arg>
+<arg>overwrite=True</arg>
+<doc>An alias for the ``HTTP Get`` keyword.</doc>
+<status status="NOT RUN" starttime="20220701 15:41:31.615" endtime="20220701 15:41:31.616"/>
+</kw>
+<kw name="Read table from CSV" library="RPA.Tables">
+<var>${orders}</var>
+<arg>orders.csv</arg>
+<arg>header=True</arg>
+<doc>Read a CSV file as a table.</doc>
+<status status="NOT RUN" starttime="20220701 15:41:31.617" endtime="20220701 15:41:31.617"/>
+</kw>
+<kw name="Open the robot order website">
+<status status="NOT RUN" starttime="20220701 15:41:31.617" endtime="20220701 15:41:31.617"/>
+</kw>
+<for flavor="IN">
+<var>${row}</var>
+<value>@{orders}</value>
+<iter>
+<var name="${row}">${row}</var>
+<kw name="Fill the form">
+<arg>${row}</arg>
+<status status="NOT RUN" starttime="20220701 15:41:31.618" endtime="20220701 15:41:31.619"/>
+</kw>
+<kw name="Click Button" library="RPA.Browser.Selenium">
+<arg>id: preview</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" starttime="20220701 15:41:31.619" endtime="20220701 15:41:31.619"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>10x</arg>
+<arg>4s</arg>
+<arg>Submit the order</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20220701 15:41:31.620" endtime="20220701 15:41:31.620"/>
+</kw>
+<kw name="Store the receipt as a PDF file">
+<var>${pdf}</var>
+<arg>${row}[Order number]</arg>
+<status status="NOT RUN" starttime="20220701 15:41:31.620" endtime="20220701 15:41:31.620"/>
+</kw>
+<kw name="Take a screenshot of the robot">
+<var>${screenshot}</var>
+<arg>${row}[Order number]</arg>
+<status status="NOT RUN" starttime="20220701 15:41:31.621" endtime="20220701 15:41:31.621"/>
+</kw>
+<kw name="Embed the robot screenshot to the receipt PDF file">
+<arg>${screenshot}</arg>
+<arg>${pdf}</arg>
+<status status="NOT RUN" starttime="20220701 15:41:31.621" endtime="20220701 15:41:31.622"/>
+</kw>
+<kw name="Go to order another robot">
+<status status="NOT RUN" starttime="20220701 15:41:31.622" endtime="20220701 15:41:31.622"/>
+</kw>
+<status status="NOT RUN" starttime="20220701 15:41:31.618" endtime="20220701 15:41:31.622"/>
+</iter>
+<status status="NOT RUN" starttime="20220701 15:41:31.618" endtime="20220701 15:41:31.623"/>
+</for>
+<kw name="Create a ZIP file of the receipts">
+<status status="NOT RUN" starttime="20220701 15:41:31.623" endtime="20220701 15:41:31.624"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Done.</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20220701 15:41:31.624" endtime="20220701 15:41:31.625"/>
+</kw>
+<status status="FAIL" starttime="20220701 15:41:27.475" endtime="20220701 15:41:31.626">Aborted by user</status>
+</test>
+<doc>Orders robots from RobotSpareBin Industries Inc.
+Saves the order HTML receipt as a PDF file.
+Saves the screenshot of the ordered robot.
+Embeds the screenshot of the robot to the PDF receipt.
+Creates ZIP archive of the receipts and the images.
+https://robocorp.com/docs/courses/build-a-robot</doc>
+<status status="FAIL" starttime="20220701 15:41:25.803" endtime="20220701 15:41:31.629"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Tasks">Tasks</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
